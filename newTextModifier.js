@@ -41,15 +41,15 @@ function convertToAligned(text) {
         // Enlève les '$' ou '$$' au début et à la fin de la ligne
         line = line.replace(/^\s*\$+\s*/, '').replace(/\s*\$+\s*$/, '');
         // Enlève les '&' au début de la ligne
-        line = line.replace(/^\s*&\s*/, '');
+        if(!line.includes("&") && line !==""){
+           line = "&"+line
+        }
+
         line = line.trim() ;
 
         // Ajoute "\\" à la fin de la ligne si ce n'est pas déjà présent
         if (!line.endsWith('\\\\') && line!=="") {
             line += '\\\\';
-        }
-        if (!line.startsWith('&') && line!=="") {
-            line = '&'+line;
         }
 
         return line;
