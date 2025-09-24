@@ -1,14 +1,3 @@
-// ==UserScript==
-// @name         Text Modifier - Safe Shortcuts
-// @namespace    local
-// @version      1.0
-// @description  Modify selected text with safe keyboard shortcuts
-// @author       You
-// @match        *://*/*
-// @grant        GM_setClipboard
-// @grant        GM_getValue
-// @grant        GM_setValue
-// ==/UserScript==
 
 (function() {
     'use strict';
@@ -51,7 +40,6 @@ function convertToAligned(text) {
 
         // Enlève les '$' ou '$$' au début et à la fin de la ligne
         line = line.replace(/^\s*\$+\s*/, '').replace(/\s*\$+\s*$/, '');
-
         // Enlève les '&' au début de la ligne
         line = line.replace(/^\s*&\s*/, '');
         line = line.trim() ;
@@ -59,6 +47,9 @@ function convertToAligned(text) {
         // Ajoute "\\" à la fin de la ligne si ce n'est pas déjà présent
         if (!line.endsWith('\\\\') && line!=="") {
             line += '\\\\';
+        }
+        if (!line.startsWith('&') && line!=="") {
+            line = '&'+line;
         }
 
         return line;
