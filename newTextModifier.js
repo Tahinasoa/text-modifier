@@ -157,13 +157,18 @@ function convertToAligned(text) {
     const fractionPattern = /([!-~]+)\/([!-~]+)/g;
     
     // 2.1 Replace all matches with LaTeX fraction format
-    const result = input.replace(fractionPattern, (match, numerator, denominator) => {
+    let result =  input.split('\n').map(line => {
+        // Replace fractions first
+        return line.replace(fractionPattern, (match, numerator, denominator) => {
         return `\\frac{${numerator}}{${denominator}}`;
     });
-    
-    // 2.2 Return the result (original input if no matches found)
+    }).join('\n');
+    //2.2 replace * into \times
+    result = result.replace(/\*/g, '\\times');
+    // 2.3 Return the result (original input if no matches found)
     return result;
 }
+
 
     // ===========================================
     // SYSTÈME DE REMPLACEMENT SÉCURISÉ
@@ -315,7 +320,7 @@ function convertToAligned(text) {
         // Alt + Shift + _ = add_underscores
         'AltShift_': { alt: true, shift: true, key: '_', func: addUnderscores, desc: 'snake_case' },
         // Alt + Shift + F = paste frac
-        'AltShift_': { alt: true, shift: true, key: 'F', func: fracProcessor, desc: 'paset Frac' },
+        'AltShift_': { alt: true, shift: true, key: 'M', func: fracProcessor, desc: 'ascii Math' },
     };
 
     document.addEventListener('keydown', function(e) {
