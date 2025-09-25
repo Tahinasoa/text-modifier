@@ -164,7 +164,7 @@ function convertToAligned(text) {
     });
     }).join('\n');
     //2.2 replace * into \times
-    result = result.replace(/\*/g, '\\times');
+    result = result.replace(/\*/g, '\\times ');
     // 2.3 Return the result (original input if no matches found)
     return result;
 }
