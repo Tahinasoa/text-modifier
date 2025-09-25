@@ -63,8 +63,8 @@ function convertToAligned(text) {
 }
 
 
-    // Fonction textProcessor - Convertit les paires de lettres en \overrightarrow{}
-    function textProcessor(text) {
+    // Fonction vecProcessor - Convertit les paires de lettres en \overrightarrow{}
+    function vecProcessor(text) {
         if (!text || typeof text !== 'string') return '';
 
         // Étape 1: Identifier toutes les zones protégées (\vec{} et \overrightarrow{})
@@ -144,7 +144,26 @@ function convertToAligned(text) {
         return result;
     }
 
-    function pasteFrac(text){return "\\frac{}{}"}
+
+    function fracProcessor(input) {
+    // 1. If input is empty, return \\frac
+    if (input === "") {
+        return "\\frac";
+    }
+    
+    // 2. Check for pattern: [any printable character]+/[any printable character]+
+    // Printable characters = alphanumeric and symbols (no spaces, line breaks, tabs)
+    // Using regex with global flag to match all occurrences
+    const fractionPattern = /([!-~]+)\/([!-~]+)/g;
+    
+    // 2.1 Replace all matches with LaTeX fraction format
+    const result = input.replace(fractionPattern, (match, numerator, denominator) => {
+        return `\\frac{${numerator}}{${denominator}}`;
+    });
+    
+    // 2.2 Return the result (original input if no matches found)
+    return result;
+}
 
     // ===========================================
     // SYSTÈME DE REMPLACEMENT SÉCURISÉ
@@ -291,12 +310,12 @@ function convertToAligned(text) {
         'AltShiftK': { alt: true, shift: true, key: 'K', func: convertToAligned, desc: 'KaTeX Aligned' },
 
         // Alt + Shift + P = Process vectors (AB -> \overrightarrow{AB})
-        'AltShiftP': { alt: true, shift: true, key: 'P', func: textProcessor, desc: 'Process Vectors' },
+        'AltShiftP': { alt: true, shift: true, key: 'P', func: vecProcessor, desc: 'Process Vectors' },
 
         // Alt + Shift + _ = add_underscores
         'AltShift_': { alt: true, shift: true, key: '_', func: addUnderscores, desc: 'snake_case' },
         // Alt + Shift + F = paste frac
-        'AltShift_': { alt: true, shift: true, key: 'F', func: pasteFrac, desc: 'paset Frac' },
+        'AltShift_': { alt: true, shift: true, key: 'F', func: fracProcessor, desc: 'paset Frac' },
     };
 
     document.addEventListener('keydown', function(e) {
